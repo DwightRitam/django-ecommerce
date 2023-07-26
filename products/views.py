@@ -88,7 +88,13 @@ def cart(request):
     try:
         cart_items=Cart.objects.get(is_paid=False,user=request.user)
     except Exception as e:
-        return redirect('/')
+        context={
+
+        "cart_has":False,
+ 
+    }
+    
+        return render(request, 'cart.html',context)    
     cart_has=False
     if(request.user.profile.get_cart_count()>=1):
         cart_has=True
