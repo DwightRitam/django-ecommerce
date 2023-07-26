@@ -79,22 +79,16 @@ def remove_Cart(request,cart_item_uid):
         print(e)
         
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 from django.conf import settings
+
 @login_required(login_url="/sign")
 def cart(request):
     cart_items=None
     try:
         cart_items=Cart.objects.get(is_paid=False,user=request.user)
     except Exception as e:
-        context={
-        
-        
-        "cart_has":False,
-       
-        
-        }
-    
-        return render(request, 'cart.html',context)
+        return redirect('/')
     cart_has=False
     if(request.user.profile.get_cart_count()>=1):
         cart_has=True
@@ -129,15 +123,22 @@ def cart(request):
         messages.success(request,'coupon applied')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  
       
-    after_shipping=cart_items.get_cart_total_price()+100
     
     # payment 
-    client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
-    payment=client.order.create({'amount':after_shipping * 100,'currency': "INR", 'payment_capture':1})
+    if cart_items:
+        after_shipping=cart_items.get_cart_total_price()+100
+        client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+        if(request.user.profile.get_cart_count()>=1):
+            amount=after_shipping
+        else:
+            amount=1    
+        payment=client.order.create({'amount':amount* 100,'currency': "INR", 'payment_capture':1})
+        
+        cart_items.razore_pay_order_id=payment['id']
+        cart_items.save()
+        
+    payment=None
     
-    cart_items.razore_pay_order_id=payment['id']
-    cart_items.save()
-    print(payment)
     context={
         
         "cart_items":cart_items,
