@@ -6,11 +6,11 @@
 {% block content %}
 
 {% for category in category.products_category.all %}
-<section class="py-6 sm:py-12  dark:text-gray-100">
+<section class="py-6 sm:py-12  dark:text-black">
 	<div class=" p-6 mx-auto space-y-8">
 		<div class="space-y-2 text-center">
 			<h2 class="text-3xl font-bold">"Find the perfect {{category.category}} for everyone on your list."</h2>
-			<p class="font-serif text-sm dark:text-gray-400">"The perfect place to find your next favorite thing."</p>
+			<p class="font-serif text-sm dark:text-black">"The perfect place to find your next favorite thing."</p>
 		</div>
 		<div class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-4">
 			<article class="flex flex-col ">
@@ -21,7 +21,7 @@
 					<a rel="noopener noreferrer" href="#" aria-label="Te nulla oportere reprimique his dolorum"></a>
 					<a rel="noopener noreferrer" href="#" class="text-xs tracki uppercase hover:underline dark:text-violet-400">Flat  40% off</a>
 					<h3 class="flex-1 py-2 text-lg font-semibold leadi">{{category.product_name}}</h3>
-					<div class="flex flex-wrap pt-3 items-center  text-xs dark:text-gray-400">
+					<div class="flex flex-wrap pt-3 items-center  text-xs dark:text-black">
                         {% for size  in category.size_variant.all %}
                             <span class="uppercase text-[15px] border hover:border-black p-1 mr-[12px] rounded-md">{{size.size_name}}
 
