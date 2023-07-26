@@ -128,16 +128,17 @@ def cart(request):
     if cart_items:
         after_shipping=cart_items.get_cart_total_price()+100
         client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+        amount=0
         if(request.user.profile.get_cart_count()>=1):
             amount=after_shipping
         else:
-            amount=1    
-        payment=client.order.create({'amount':amount* 100,'currency': "INR", 'payment_capture':1})
+            amount=10    
+        payment=client.order.create({'amount': amount * 100,'currency': "INR", 'payment_capture':1})
         
         cart_items.razore_pay_order_id=payment['id']
         cart_items.save()
-        
-    payment=None
+        print(payment)
+    # payment=None
     
     context={
         
