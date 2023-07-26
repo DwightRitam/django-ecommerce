@@ -1,0 +1,103 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+
+
+
+
+  <div class="sliderAx h-auto">
+    
+
+    <div  class=" w-[100%] m-auto">
+      <div class="bg-cover bg-image object-contain bg-top text-white sm:h-[33rem]  py-24 px-10 sm:py-52 sm:px-12"
+         >
+
+        <p class="font-bold text-sm uppercase "
+		style="color: rgb(248, 109, 55);">bonjour</p>
+        <p class="text-3xl font-bold">Hello 
+			{% if request.user.is_authenticated  %}
+			<span class=" uppercase   hover:underline"
+			style="color: rgb(138, 232, 248);">{{request.user.first_name}}</span> 
+			{% else %}
+			<span class=" uppercase hover:underline"
+			style="color: rgb(137, 218, 243);">User</span> 
+			{% endif %}
+			</p>
+        <p class="text-2xl text-black font-serif  mb-10 ">Welcome to our all new ecommerce site</p>
+        <a href="#"
+          class="bg-purple-800 py-4 px-8 text-white font-bold uppercase text-xs rounded hover:bg-gray-200 hover:text-gray-800">Contact
+          us</a>
+
+      </div> 
+      <br>
+    </div>
+  </div>
+  
+
+
+
+<!-- body section  -->
+
+
+  
+
+<section class="py-6 sm:py-12 dark:bg-gray-800 dark:text-gray-100">
+	<div class=" p-6 mx-auto space-y-8">
+		<div class="space-y-2 text-center">
+			<h2 class="text-3xl font-bold">"Find the perfect gift for everyone on your list."</h2>
+			<p class="font-serif text-sm dark:text-gray-400">"The perfect place to find your next favorite thing."</p>
+		</div>
+		<div class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-4">
+			{% for category in categories  %}
+			<article class="flex flex-col dark:bg-gray-900">
+				<a rel="noopener noreferrer" href="{% url 'get_categories' category.category_name%}"  target="_blank" aria-label="Te nulla oportere reprimique his dolorum">
+					<img alt="{{cetegory.category_image}}" class="object-contain w-full h-52 dark:bg-gray-500" src="/media/{{category.category_image}}">
+				</a>
+				<div class="flex flex-col flex-1 p-6">
+					<p rel="noopener noreferrer"  class="text-xs tracki uppercase hover:underline dark:text-violet-400">Flat  40% off</p>
+					<h3 class="flex-1 py-2 text-lg font-semibold leadi">{{category.product_name}}</h3>
+					<div class="flex flex-wrap justify-between pt-3 space-x-2 text-xs dark:text-gray-400">
+						<a href="{{category.category_name}}"><span class="uppercase text-[18px]">{{category.category_name}}</span></a>
+						<span>₹{{category.price}}</span>
+					</div>
+				</div>
+			</article>
+			{% endfor %}
+			
+		</div>
+	</div>
+</section>
+
+
+
+
+
+
+
+<script>
+  function changeImageForMobile() {
+  // Get the width of the window.
+  var windowWidth = window.innerWidth;
+
+  // If the width of the window is less than 768px, then set the background image to the mobile image.
+  if (windowWidth < 800) {
+    document.querySelector('.bg-image').style.backgroundImage = 'url("../static/images/Fotoram.io (2).jpg")';
+  } else {
+    // Otherwise, set the background image to the desktop image.
+    document.querySelector('.bg-image').style.backgroundImage = 'url("../static/images/Fotoram.io (4).jpg")';
+  }
+}
+
+// When the window is resized, call the changeImageForMobile() function.
+window.addEventListener('resize', changeImageForMobile);
+window.addEventListener('load', changeImageForMobile);
+
+</script>
+
+
+{% endblock content %}

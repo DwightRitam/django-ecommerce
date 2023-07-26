@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- <link rel="stylesheet" href="../static/css_classes/not_found.css"> -->
+	<link rel="shortcut icon" href="../static/images/favicon-32x32.png" type="image/x-icon">
+	<title>Document</title>
+</head>
+<body>
+	<section class=" items-center h-full p-16 dark:bg-gray-900 dark:text-gray-100">
+		<div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
+			<div class="max-w-md text-center">
+				<img src="https://media.tenor.com/kzMUk2-LgL8AAAAi/welcome.gif" alt="">
+				<p class="text-[20px] font-semibold "> Hey <span class=" uppercase hover:underline"
+					style="color: rgb(248, 109, 55);">{{curr_user.first_name}}</span> Enter the otp that has been sent to your email account <span class="uppercase hover:underline"
+					style="color: rgb(137, 218, 243);">{{curr_user.username}}</span></p>
+			</div>
+		</div>
+		<form action="" class=" space-y-6 md:w-[50%] m-auto"  method="post" >
+			{% csrf_token %} 
+			{% if messages %}
+			<div
+				class="mb-4 border border-black text-xl font-serif text-blue-500  border-b-8 rounded-lg bg-info-100 px-6 py-5  text-info-800"
+				role="alert">
+					{% for message in messages %}
+					{{message}}
+					{% endfor %}
+			</div>
+			{% endif %}
+			<div class="space-y-4 ">
+				<div>
+					<label for="text" class="block mb-2 text-xl">Email_Otp</label>
+					<input type="text" name="email_Otp" id="email_Otp" placeholder="123456" class="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+				</div>
+				
+			<div class="space-y-4 ">
+				<div>
+					<button type="submit" class="w-full px-8 py-3 font-semibold   border border-red-600 rounded-md">Enter</button>
+				</div>
+				
+			</div>
+		</form>
+	</section>
+</body>
+</html>
+
+{% endblock content %}

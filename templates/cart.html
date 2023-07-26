@@ -1,0 +1,191 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if cart_has %}
+<div class=" m-auto mt-[20px] sm:mt-10 flex w-full">
+    <div class="w-full m-auto sm:flex shadow-md my-5 sm:my-10">
+      <div class="w-full sm:w-3/4 bg-white px-[20px] sm:px-10 py-10 m-auto">
+        <div class="flex justify-between border-b pb-8">
+          <h1 class="font-semibold text-10px  sm:text-2xl">Shopping Cart {{cart_has}}</h1>
+          <h2 class="font-semibold text-10px sm:text-2xl"
+		  	onclick="no_cart('{{request.user.profile.get_cart_count}}')" 
+		  >{{request.user.profile.get_cart_count}} Items</h2>
+        </div>
+        <div class="flex mt-10 mb-5  ">
+          <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Product Details</h3>
+          <h3 class="font-semibold  text-gray-600 text-xs uppercase w-[60%]  sm:w-1/5 text-center">Quantity</h3>
+          <h3 class="font-semibold  text-gray-600 text-xs uppercase hidden sm:block w-1/5 text-center">Size variant</h3>
+          <h3 class="font-semibold  text-gray-600 text-xs uppercase hidden sm:block w-1/5 text-center">Price</h3>
+        </div>
+		{% for cart_item in cart_items.cart_items.all  %}
+		  
+		
+        <div class="flex  items-center hover:bg-gray-100   sm:-mx-8  px-1 sm:px-6 py-5">
+          <div class="flex w-[60%] sm:w-2/5"> <!-- product -->
+            <div class="w-[7rem]">
+              <img class="sm:h-36 sm:w-28 h-[9rem] w-52 object-contain" src="/media/{{cart_item.products.product_images.first.image}}" alt="product_img">
+            </div>
+            <div class="flex flex-col justify-between ml-4 flex-grow">
+              <span class="font-bold text-sm">{{cart_item.products.product_name}}</span>
+              <span class="text-red-500 text-[13px] sm:text-[18px]">{{cart_item.products.product_description}}</span>
+              <a href="{% url 'remove_Cart'  cart_item.uid  %}" class="font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</a>
+            </div>
+          </div>
+          <div class="flex justify-center w-[45%] sm:w-1/5">
+            <svg class="fill-current text-gray-600 w-3 cursor-pointer" 
+            onclick="remove_cart('{{ cart_item.uid}}')"
+              viewBox="0 0 448 512" id="minus">
+				<path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
+            </svg>
+
+            <input class="mx-2 border text-center w-8" type="text" id="value" 
+			  
+			 value="1" >
+
+            
+            <svg class="fill-current text-gray-600 w-3 cursor-pointer" viewBox="0 0 448 512" id="plus"
+            onclick="add_cart('{{ cart_item.products.uid}}','{{cart_item.get_product_size}}')" >
+              <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
+            </svg>
+          </div>
+          <span class="text-center w-1/5 font-semibold uppercase text-xl hidden sm:block">{{cart_item.get_product_size}}</span>
+          <span class="text-center w-1/5 font-semibold  hidden text-xl  sm:block">₹{{cart_item.get_product_price}}</span>
+        </div>
+		{% endfor %}
+
+      
+
+        <a href="" class="flex font-semibold text-indigo-600 text-sm mt-10">
+      
+          <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"/></svg>
+          Continue Shopping
+        </a>
+      </div>
+
+      <div id="summary" class="w-full sm:w-1/4 m-auto sm:-m-0 px-8 py-10">
+        <h1 class="font-semibold text-2xl border-b pb-8">Order Summary</h1>
+        <div class="flex justify-between mt-10 mb-5">
+          <span class="font-semibold text-sm uppercase">Items {{request.user.profile.get_cart_count}}</span>
+          <span class="font-semibold text-sm">{{cart_items.get_cart_total_price}}</span>
+        </div>
+        <div>
+          <label class="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
+          <select class="block p-2 text-gray-600 w-full text-sm">
+            <option>Standard shipping - 100.00</option>
+          </select>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+          {% if messages %}
+          <div id="myElement"
+            class="mb-2 border border-black text-[20px] font-serif text-blue-500  border-b-8 rounded-lg bg-info-100 px-6 py-2  text-info-800"
+            role="alert">
+              {% for message in messages %}
+              {{message}}
+              {% endfor %}
+          </div>
+			{% endif %}
+        <div class="py-10">
+          <label for="promo" class="font-semibold inline-block mb-3  text-sm uppercase">Coupon Code</label>
+          <input type="text" name="coupon" id="promo" placeholder="Enter your code" class=" border border-black 
+          rounded-md p-2 mb-4 text-sm w-full">
+          
+       {% if cart_items.coupon %}
+        <a href="{% url 'remove_coupon' cart_items.uid %}" class="border text-white bg-green-400 p-2 mt-3 border-green-500 rounded-md"> {{cart_items.coupon.coupon_code}} </a>
+        {% endif %} 
+        </div>
+          
+
+        <button type="submit" class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">Apply</button>
+        
+      </form>
+      
+        <div class="border-t mt-8">
+          <div class="flex font-semibold justify-between py-6 text-sm uppercase">
+            <span>Total cost</span>
+            <span>{{after_shipping }}</span>
+          </div>
+          <button id="rzp-button1" class="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
+        </div>
+      </div>
+
+    </div>
+</div>
+{% else %}
+
+<section class="flex items-center my-14 h-full sm:p-16 dark:bg-gray-900 dark:text-gray-100">
+	<div class="container flex flex-col items-center justify-center px-5 mx-auto my-8 space-y-8 text-center sm:max-w-md">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class=" animate-bounce w-40 h-40 dark:text-gray-600">
+			<path fill="currentColor" d="M256,16C123.452,16,16,123.452,16,256S123.452,496,256,496,496,388.548,496,256,388.548,16,256,16ZM403.078,403.078a207.253,207.253,0,1,1,44.589-66.125A207.332,207.332,0,0,1,403.078,403.078Z"></path>
+			<rect width="176" height="32" x="168" y="320" fill="currentColor"></rect>
+			<polygon fill="currentColor" points="210.63 228.042 186.588 206.671 207.958 182.63 184.042 161.37 162.671 185.412 138.63 164.042 117.37 187.958 141.412 209.329 120.042 233.37 143.958 254.63 165.329 230.588 189.37 251.958 210.63 228.042"></polygon>
+			<polygon fill="currentColor" points="383.958 182.63 360.042 161.37 338.671 185.412 314.63 164.042 293.37 187.958 317.412 209.329 296.042 233.37 319.958 254.63 341.329 230.588 365.37 251.958 386.63 228.042 362.588 206.671 383.958 182.63"></polygon>
+		</svg>
+		<p class="text-3xl font-serif">Looks like there is no product in the cart</p>
+		<a rel="noopener noreferrer" href="/" class="px-8 py-3 font-semibold rounded bg-violet-400 text-gray-900">Back to homepage</a>
+	</div>
+</section>
+{% endif %}
+<script>
+  const element = document.getElementById("myElement");
+  
+  const addClass = function() {
+    element.classList.add("hidden");
+  };
+  
+  setTimeout(addClass, 5000);
+</script>
+<script>
+  
+  function add_cart(uid,size)
+      {
+        window.location.href= `/add_to_cart/${uid}?size=${size}`; 
+        
+      }
+      function remove_cart(uid)
+      {
+        window.location.href= `cart/remove_Cart/${uid}`; 
+        
+      }
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    "key": "rzp_test_2pFUbM1yywHQFk", // Enter the Key ID generated from the Dashboard
+    "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "FilmoTrend",
+    "description": "Purchases",
+    "image": "https://i.ibb.co/Dp21jDN/filmo-logo.png",
+    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+      window.location.href= `http://127.0.0.1:8000/cart/success/?order_id={{payment.id}}`
+        {% comment %} alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature) {% endcomment %}
+    },
+    
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock content %}

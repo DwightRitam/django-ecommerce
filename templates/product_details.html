@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Product Card/Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../static/images/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../static/css_classes/details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    
+  </head>
+  <body>
+    
+    <div class = "card-wrapper ">
+      <div class = "card">
+        <!-- card left -->
+        <div class = "product-imgs">
+          <div class = "img-display">
+            <div class = "img-showcase">
+              {% for images in product.product_images.all %}
+              <img src = "/media/{{images.image}}"  alt = "shoe image"
+              class="h-[13rem] md:h-[20rem] object-contain hover:">
+              
+              {% endfor %}
+            </div>
+          </div>
+          <div class = "img-select">
+            {% for images in product.product_images.all %}
+            <div class = "img-item">
+              <a  data-id = "{{ forloop.counter }}">
+                <img src = "/media/{{images.image}}" alt = "shoe-image"
+                class="h-[6rem]  md:h-[10rem] w-[10rem] object-contain border rounded-sm hover:border-none">
+              </a>
+            </div>
+            
+            {% endfor %}
+
+           
+          </div>
+        </div>
+       
+        <!-- card right -->
+        <div class = "product-content">
+          <h2 class = "product-title">{{product.product_name}}</h2>
+          <a href = "#" class = "product-link">visit nike store</a>
+          <div class = "product-rating">
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star-half-alt"></i>
+            <span>4.7(21)</span>
+          </div>
+
+          <div class = "product-price">
+            {% if updated_price %}
+            <p class = "last-price">Price : ₹{{updated_price}}</p>
+            {% else %}
+            <p class = "last-price">Price : ₹{{product.price}}</p>
+            {% endif %}
+          </div>
+
+          <div class = "product-detail">
+            <h2>about this item: </h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo eveniet veniam tempora fuga tenetur placeat sapiente architecto illum soluta consequuntur, aspernatur quidem at sequi ipsa!</p>
+            
+            <ul>
+              <li>Available: <span>in stock</span></li>
+              <li>Category: <span>{{product.category}}</span></li>
+              <li>Shipping Area: <span>All over the world</span></li>
+              <li>Shipping Fee: <span>Free</span></li>
+            </ul>
+          </div>
+          {% if messages %}
+          <div id="myElement"
+            class="mb-4 border  border-black text-xl font-serif text-blue-500  border-b-8 rounded-lg bg-info-100 px-6 py-5  text-info-800"
+            role="alert">
+              {% for message in messages %}
+              {{message}}
+              {% endfor %}
+          </div>
+			{% endif %}
+          <p class="font-bold uppercase pb-2 pl-[1px] md:pl-2">select size :- </p>
+          <div class = "purchase-info flex items-center">
+            {% for size  in product.size_variant.all %}
+            <div class=" flex pl-[1px] md:pl-2">
+              <span class="relative top-[-5px] left-[5px] border rounded-sm md:p-2 uppercase">{{size.size_name}}</span>
+              <input type="radio" 
+              onchange="get_correct_price('{{size.size_name}}')" 
+              {% comment %} onclick="modifyUrl('HTML Tutorial', 'HTMLTutorial.html');" {% endcomment %}
+              {% if selected_size == size.size_name  %}  checked {% endif %} 
+              name="checkBox1" class="w-[40px] md:w-[60px]" >
+            </div>
+            {% endfor %}
+          </div>
+          <div class="space-x-2 flex pl-[1px] md:pl-2">
+             {% if already_exists %}
+              
+           
+            <a href="{% url 'cart' %}">
+          <button type = "button" class = " bg-[#ff9f00] border text-white font-serif border-white uppercase rounded-md p-[10px]">
+            Go to Cart <i class = "fas fa-shopping-cart"></i>
+          </button></a>
+          {% else %}
+          <a href="{% url 'add_to_cart' product.uid %}?size={{selected_size}}"  >
+            <button type = "button" class = " bg-[#ff9f00] border text-white font-serif border-white uppercase rounded-md p-[10px]">
+              Add to Cart <i class = "fas fa-shopping-cart"></i>
+            </button></a>
+          {% endif %}
+          <button type = "button" class = " bg-[#fb641b] border text-white font-serif border-white uppercase rounded-md p-[10px]">
+            Add to wishlist <i class="fas fa-heart"></i>
+          </button>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <script src="../static/js/details.js"></script>
+    <script>
+      function get_correct_price(size)
+      {
+        window.location.href=window.location.pathname+ `?size=${size}` 
+      }
+   
+    </script>
+    <script>
+    const element = document.getElementById("myElement");
+    
+    const addClass = function() {
+      element.classList.add("hidden");
+    };
+    
+    setTimeout(addClass, 5000);
+  </script>
+
+  </body>
+</html>
+
+{% endblock content %}
