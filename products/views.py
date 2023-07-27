@@ -24,12 +24,6 @@ def get_by_genders(request,gender):
 
 def get_categories(request,category_type):
     categories=Category.objects.filter(category_name=category_type)
-    for category in categories:
-        for product in category.products_category.all():
-            print(product.product_name)
-            print(product.slug)
-            print(product.category)
-            print(category.category_image)
     context={
         "categories":categories
     }
@@ -157,7 +151,7 @@ def cart(request):
         
         cart_items.razore_pay_order_id=payment['id']
         cart_items.save()
-        print(payment)
+        # print(payment)
     # payment=None
     
     context={

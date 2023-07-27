@@ -23,7 +23,7 @@
 		{% for cart_item in cart_items.cart_items.all  %}
 		  
 		
-        <div class="flex  items-center hover:bg-black   sm:-mx-8  px-1 sm:px-6 py-5">
+        <div class="flex  items-center hover:bg-gray-200   sm:-mx-8  px-1 sm:px-6 py-5">
           <div class="flex w-[60%] sm:w-2/5"> <!-- product -->
             <div class="w-[7rem]">
               <img class="sm:h-36 sm:w-28 h-[9rem] w-52 object-contain" src="/media/{{cart_item.products.product_images.first.image}}" alt="product_img">
