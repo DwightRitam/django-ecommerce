@@ -82,9 +82,10 @@ def signin_page(request):
         user_obj = User.objects.create(first_name = first_name , last_name= last_name , email = email , username = email)
         user_obj.set_password(password)
         user_obj.save()
-        messages.warning(request, "A OTP has been sent to your email address")
+        # messages.warning(request, "A OTP has been sent to your email address")
         flag=True
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        print(user_obj.profile.email_token)
+        return redirect(f'email_verification/{user_obj.profile.email_token}')
         
     # if request.user.is_authenticated:
     #     # return redirect('/'

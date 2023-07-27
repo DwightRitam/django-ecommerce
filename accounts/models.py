@@ -75,6 +75,7 @@ def generate_random_number():
     number += str(random.randint(0, 9))
   return number    
 
+#MEANS WHENEVER A USER OBJECT HAS BEEN CREATE ,CALL THIS SIGNAL
 @receiver(post_save,sender=User)
 def send_email_token(sender,instance,created, **kwargs):
     try:
