@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import *
 from accounts.models import *
-
+from django.core.mail import send_mail
 import razorpay
 def index(request):
     categories=Category.objects.all()
@@ -34,21 +34,11 @@ def details_page(request,slug):
     context={ "product" : product }
     if request.GET.get('size'):
         size=request.GET.get('size')
-        # print(size)
-        size_variant=SizeVariant.objects.get(size_name=size)
-        cart_items=CartItem.objects.filter(products=product,size_variant=size_variant)
         
-        already_exists=False
-        if cart_items.exists():
-            already_exists=True
-            # print('already exists')
-        else:
-            already_exists=False
-            # print('not exists')    
+         
         price=product.get_product_price_by_size(size)
         context['selected_size']=size
         context['updated_price']=price
-        context['already_exists']=already_exists
         
         # print(price)
     
@@ -70,7 +60,8 @@ def add_to_cart(request,uid):
         # cart_items.size_variant=size_variant
        
         cart_items.save()
-        return redirect('/cart')
+        messages.error(request,f'1 {products} has been added to cart')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         messages.error(request,'Please select a Size to proceed')
         # print('not in cart')
@@ -173,10 +164,22 @@ def remove_coupon(request,uid):
     messages.success(request,'coupon applied')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))  
 
+def send_payment_successful(request,email_price,email_items,email):
+    subject = 'Your Transaction has been successfully applied'
+    user=request.user
+    message = f'Hey {user.first_name}, {email_items} items has been successfully purchased by you and yout total amount is{email_price}'
+    email_from = settings.EMAIL_HOST_USER
+    send_mail(subject,message,email_from,{email})
 
 def success(request):
     order_id=request.GET.get('order_id')
     cart=Cart.objects.get(razore_pay_order_id=order_id)
+    #send the confirmation email
+    send_payment_successful(request,cart.get_cart_total_price(),request.user.profile.get_cart_count(),request.user.username)
     cart.is_paid=True
+    #i can create order with this
     cart.save()
     return render(request,'success.html')
+
+
+    

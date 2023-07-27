@@ -117,12 +117,17 @@
         <div class="px-2 py-2 ">
           <div class="grid gap-3 ">
             <div class="text-white">
-              <a href="#!" aria-current="true"
+              
+              <a  href="{% url 'get_by_genders' 'men'  %}" aria-current="true"
                 class="block border-b border-neutral-200 px-2 py-2 transition duration-150 ease-in-out  ">Men </a>
-              <a href="#!" aria-current="true"
+              <a href="{% url 'get_by_genders' 'female' %}" aria-current="true"
                 class="block border-b border-neutral-200 px-2 py-2 transition duration-150 ease-in-out  ">Women</a>
-              <a href="#!" aria-current="true"
-                class="block border-b border-neutral-200 px-2 py-2 transition duration-150 ease-in-out  ">Kids</a>
+              <a href="{% url 'get_categories' 'sneakers' %}" aria-current="true"
+                class="block border-b border-neutral-200 px-2 py-2 transition duration-150 ease-in-out  ">Sneakers</a>
+              <a href="{% url 'get_categories' 'Tshirts' %}" aria-current="true"
+                class="block border-b border-neutral-200 px-2 py-2 transition duration-150 ease-in-out  ">Tshirts</a>
+              <a href="{% url 'get_categories' 'shirts' %}"aria-current="true"
+                class="block border-b border-neutral-200 px-2 py-2 transition duration-150 ease-in-out  ">Shirts</a>
 
             </div>
           </div>

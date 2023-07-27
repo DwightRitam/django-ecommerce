@@ -101,19 +101,12 @@
             {% endfor %}
           </div>
           <div class="space-x-2 flex pl-[1px] md:pl-2">
-             {% if already_exists %}
-              
-           
-            <a href="{% url 'cart' %}">
-          <button type = "button" class = " bg-[#ff9f00] border text-white font-serif border-white uppercase rounded-md p-[10px]">
-            Go to Cart <i class = "fas fa-shopping-cart"></i>
-          </button></a>
-          {% else %}
+             
           <a href="{% url 'add_to_cart' product.uid %}?size={{selected_size}}"  >
             <button type = "button" class = " bg-[#ff9f00] border text-white font-serif border-white uppercase rounded-md p-[10px]">
               Add to Cart <i class = "fas fa-shopping-cart"></i>
             </button></a>
-          {% endif %}
+          
           <button type = "button" class = " bg-[#fb641b] border text-white font-serif border-white uppercase rounded-md p-[10px]">
             Add to wishlist <i class="fas fa-heart"></i>
           </button>
