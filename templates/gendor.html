@@ -1,0 +1,39 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+
+<section class="py-6 sm:py-12  dark:text-black">
+	<div class=" p-6 mx-auto space-y-8">
+		<div class="space-y-2 text-center">
+			<h2 class="text-3xl font-bold">"Find the perfect styles for  <span class="uppercase hover:underline">{{gender}}</span> "</h2>
+			<p class="font-serif text-sm dark:text-black">"The perfect place to find your next favorite thing."</p>
+		</div>
+		<div class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-4">
+			{% for category in categories  %}
+			<article class="flex flex-col ">
+				<a rel="noopener noreferrer" href="{% url 'get_categories' category.category_name%}"  target="_blank" aria-label="Te nulla oportere reprimique his dolorum">
+					<img alt="{{cetegory.category_image}}" class="object-contain w-full h-52 " src="/media/{{category.category_image}}">
+				</a>
+				<div class="flex flex-col flex-1 p-6">
+					<p rel="noopener noreferrer"  class="text-xs tracki uppercase hover:underline dark:text-violet-400">Flat  40% off</p>
+					<h3 class="flex-1 py-2 text-lg font-semibold leadi">{{category.product_name}}</h3>
+					<div class="flex flex-wrap justify-between pt-3 space-x-2 text-xs ">
+						<a href="{{category.category_name}}"><span class="uppercase text-[18px]">{{category.category_name}}</span></a>
+						<span>₹{{category.price}}</span>
+					</div>
+				</div>
+			</article>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+
+
+
+
+{% endblock content %}

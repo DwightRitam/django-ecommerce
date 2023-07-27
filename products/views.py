@@ -13,11 +13,25 @@ def index(request):
     }
     return render(request, 'index.html',context)
 
-
-def get_categories(request,category):
-    category=Category.objects.get(category_name=category)
+def get_by_genders(request,gender):
+    categories=Category.objects.filter(gender_category=gender)
+    # print(categories)
     context={
-        "category":category
+        "categories":categories,
+        "gender":gender
+    }
+    return render(request, 'gendor.html',context)
+
+def get_categories(request,category_type):
+    categories=Category.objects.filter(category_name=category_type)
+    for category in categories:
+        for product in category.products_category.all():
+            print(product.product_name)
+            print(product.slug)
+            print(product.category)
+            print(category.category_image)
+    context={
+        "categories":categories
     }
     return render(request, 'category.html',context)
 def details_page(request,slug):
@@ -171,4 +185,4 @@ def success(request):
     cart=Cart.objects.get(razore_pay_order_id=order_id)
     cart.is_paid=True
     cart.save()
-    return HttpResponse('payment success')
+    return render(request,'success.html')

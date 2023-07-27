@@ -45,10 +45,10 @@
     <ul class=" items-center text-[13px] lg:text-xl font-serif text-white hidden space-x-1 lg:space-x-2 md:flex">
 
       <li class="flex">
-        <a rel="noopener noreferrer" href="#" class="flex items-center px-4 -mb-1  dark:border-transparent">Men</a>
+        <a rel="noopener noreferrer" href="{% url 'get_by_genders' 'men'  %}" class="flex items-center px-4 -mb-1  dark:border-transparent">Men</a>
       </li>
       <li class="flex">
-        <a rel="noopener noreferrer" href="#" class="flex items-center px-4 -mb-1  dark:border-transparent">Women</a>
+        <a rel="noopener noreferrer" href="{% url 'get_by_genders' 'female' %}" class="flex items-center px-4 -mb-1  dark:border-transparent">Women</a>
       </li>
       <li class="flex">
         <a rel="noopener noreferrer" href="{% url 'get_categories' 'sneakers' %}" class="flex items-center px-4 -mb-1  dark:border-transparent">Sneakers</a>

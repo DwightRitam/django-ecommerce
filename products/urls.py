@@ -4,7 +4,9 @@ from .views import *
 from django.urls import path 
 urlpatterns = [
     path("", index, name="index"),
-    path("get_categories/<category>", get_categories, name="get_categories"),
+    path("get_categories/<category_type>", get_categories, name="get_categories"),
+    
+    path("get_by_genders/<gender>", get_by_genders, name="get_by_genders"),
     path("<slug>/", details_page, name="details_page"),
     path("cart/remove_Cart/<cart_item_uid>",remove_Cart,name="remove_Cart"),
     path("cart/success/",success,name="success"),

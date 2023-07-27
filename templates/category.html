@@ -5,33 +5,35 @@
 
 {% block content %}
 
-{% for category in category.products_category.all %}
+{% for category in categories %}
+
 <section class="py-6 sm:py-12  dark:text-black">
 	<div class=" p-6 mx-auto space-y-8">
 		<div class="space-y-2 text-center">
-			<h2 class="text-3xl font-bold">"Find the perfect {{category.category}} for everyone on your list."</h2>
+			<h2 class="text-3xl font-bold">"Find the perfect {{category.category_name}} for everyone on your list."</h2>
 			<p class="font-serif text-sm dark:text-black">"The perfect place to find your next favorite thing."</p>
 		</div>
 		<div class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-4">
+			{% for product in category.products_category.all %}
 			<article class="flex flex-col ">
-				<a rel="noopener noreferrer" href="{% url 'details_page' category.slug %}" target="_blank" aria-label="Te nulla oportere reprimique his dolorum">
-					<img alt="cetegory.category_image" class="object-contain w-full h-52 " src="/media/{{category.product_images.first.image}}">
+				<a rel="noopener noreferrer" href="{% url 'details_page' product.slug %}" target="_blank" aria-label="Te nulla oportere reprimique his dolorum">
+					<img alt="cetegory.category_image" class="object-contain w-full h-52 " src="/media/{{product.product_images.last.image}}">
 				</a>
 				<div class="flex flex-col flex-1 p-6">
-					<a rel="noopener noreferrer" href="#" aria-label="Te nulla oportere reprimique his dolorum"></a>
-					<a rel="noopener noreferrer" href="#" class="text-xs tracki uppercase hover:underline dark:text-violet-400">Flat  40% off</a>
-					<h3 class="flex-1 py-2 text-lg font-semibold leadi">{{category.product_name}}</h3>
+					<a rel="noopener noreferrer" href="{% url 'details_page' product.slug %}" class="text-xs tracki uppercase hover:underline dark:text-violet-400">{{product.product_description}}</a>
+					<h3 class="flex-1 py-2 text-lg font-semibold leadi">{{product.product_name}}</h3>
 					<div class="flex flex-wrap pt-3 items-center  text-xs dark:text-black">
-                        {% for size  in category.size_variant.all %}
+                        {% for size  in product.size_variant.all %}
                             <span class="uppercase text-[15px] border hover:border-black p-1 mr-[12px] rounded-md">{{size.size_name}}
 
                             </span>
                             {% endfor %}
-						<span class="ml-[2rem] text-[15px]" >₹{{category.price}}</span>
+						<span class="ml-[2rem] text-[15px]" >₹{{product.price}}</span>
 					</div>
 				</div>
 			</article>
 			
+			{% endfor %}
 		</div>
 	</div>
 </section>
