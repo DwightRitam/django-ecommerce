@@ -167,19 +167,30 @@ def remove_coupon(request,uid):
 def send_payment_successful(request,email_price,email_items,email):
     subject = 'Your Transaction has been successfully applied'
     user=request.user
-    message = f'Hey {user.first_name}, {email_items} items has been successfully purchased by you and yout total amount is{email_price}'
+    message = f'Hey {user.first_name} 👩‍💻, your order items are this:- {email_items} and yout total amount is {email_price},THANK YOU FOR SHOPPING WITH US ,HOPE WE MEET AGAIN 😊🐱‍🚀💖'
     email_from = settings.EMAIL_HOST_USER
     send_mail(subject,message,email_from,{email})
 
 def success(request):
     order_id=request.GET.get('order_id')
     cart=Cart.objects.get(razore_pay_order_id=order_id)
-    #send the confirmation email
-    send_payment_successful(request,cart.get_cart_total_price(),request.user.profile.get_cart_count(),request.user.username)
     cart.is_paid=True
-    #i can create order with this
     cart.save()
+    #i can create order with this
+    ordered=Order.objects.create(cart=cart,user=request.user)
+    ordered.save()
+    s=""
+    for cart_prod in cart.cart_items.all():
+        s+=cart_prod.products.product_name + ","
+    #send the confirmation email
+    send_payment_successful(request,cart.get_cart_total_price(),s,request.user.username)
+     
     return render(request,'success.html')
+
+
+def order(request):
+    
+    return render(request,'order.html')
 
 
     
