@@ -74,7 +74,30 @@
 </section>
 
 
-
+<section class="py-2  ">
+	<div class=" p-6 mx-auto space-y-2">
+		<div class="space-y-2 text-center">
+			<h2 class="text-3xl font-bold">"Find the perfect gift as per your gender"</h2>
+		</div>
+		<div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+			
+			<article class="flex flex-col ">
+				<a rel="noopener noreferrer"  href="{% url 'get_by_genders' 'female'  %}"  target="_blank" aria-label="Te nulla oportere reprimique his dolorum">
+					<img alt="{{cetegory.category_image}}" class=" w-full h-full " src="../static/images/women front image.webp">
+				</a>
+				
+			</article>
+			<article class="flex flex-col ">
+				<a rel="noopener noreferrer" href="{% url 'get_by_genders' 'men' %}"  target="_blank" aria-label="Te nulla oportere reprimique his dolorum">
+					<img alt="{{cetegory.category_image}}" class=" w-full h-full " src="../static/images/men front image.webp">
+				</a>
+				
+			</article>
+			
+			
+		</div>
+	</div>
+</section>
 
 
 

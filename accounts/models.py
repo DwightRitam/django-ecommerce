@@ -17,15 +17,35 @@ class Profile(BaseModel):
     
     def get_cart_count(self):
       return CartItem.objects.filter(cart__is_paid=False,cart__user=self.user).count()
+    
+import random
+def generate_random_number():
+  """Generates a 6-digit random number."""
+  number = ""
+  for i in range(6):
+    number += str(random.randint(0, 9))
+  return number    
 
+
+#MEANS WHENEVER A USER OBJECT HAS BEEN CREATE ,CALL THIS SIGNAL
+@receiver(post_save,sender=User)
+def send_email_token(sender,instance,created, **kwargs):
+    try:
+        if created:
+            email_token=str(uuid.uuid4())
+            email_Otp=generate_random_number()
+            profile=Profile.objects.create(user = instance , email_token = email_token,email_Otp=email_Otp)
+            email=instance.email
+            send_account_activation(email,email_token,email_Otp)
+            
+    except Exception as e:
+        print(e)     
 # by this we can distinguish which user has which cart 
 class Cart(BaseModel):
   user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='user_cart')
   coupon=models.ForeignKey(Coupon, on_delete=models.SET_NULL,null=True,blank=True)
   is_paid=models.BooleanField(default=False)
   razore_pay_order_id=models.CharField(max_length=100,null=True, blank=True)
-  razore_pay_payment_id=models.CharField(max_length=100,null=True, blank=True)
-  razore_pay_payment_signature=models.CharField(max_length=100,null=True, blank=True)
   
   
   # to get the cart total price 
@@ -64,31 +84,17 @@ class CartItem(BaseModel):
   
   def is_item_paid(self):
     return self.cart.is_paid  
+  
   def __str__(self):
      return self.products.product_name
     
-import random
-def generate_random_number():
-  """Generates a 6-digit random number."""
-  number = ""
-  for i in range(6):
-    number += str(random.randint(0, 9))
-  return number    
 
-#MEANS WHENEVER A USER OBJECT HAS BEEN CREATE ,CALL THIS SIGNAL
-@receiver(post_save,sender=User)
-def send_email_token(sender,instance,created, **kwargs):
-    try:
-        if created:
-            email_token=str(uuid.uuid4())
-            email_Otp=generate_random_number()
-            profile=Profile.objects.create(user = instance , email_token = email_token,email_Otp=email_Otp)
-            email=instance.email
-            send_account_activation(email,email_token,email_Otp)
-            
-    except Exception as e:
-        print(e)     
-     
+class Order(BaseModel):
+   user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='order_cart')   
+   cart=models.ForeignKey(Cart,on_delete=models.CASCADE,related_name="order_items")
+   
+   def __str__(self):
+      return   self.cart
      
      
         

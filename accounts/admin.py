@@ -16,4 +16,9 @@ class CartItemAdmin(admin.ModelAdmin):
         list_display=['cart','products','size_variant']
         model=CartItem
 
+@admin.register(Order)    
+class OrderAdmin(admin.ModelAdmin):
+        list_display=['user','cart']
+        model=Order
+
 
