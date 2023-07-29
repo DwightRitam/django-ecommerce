@@ -188,17 +188,17 @@ def success(request):
      
     return render(request,'success.html')
 
-
+@login_required(login_url="/sign")
 def order(request):
     orders=Order.objects.filter(user=request.user)
-    # for order in orders:
-    #     for prod in order.cart.order_items.all():
-    #         for product in prod.cart.cart_items.all():
-            
-    #             print(product.products.price)
-    
+    order_has=False
+    if orders.exists():
+        order_has=True
+    else:
+        order_has=False   
     context={
-        "orders": orders
+        "orders": orders,
+        "order_has":order_has
     }   
     return render(request,'order.html',context)
 
