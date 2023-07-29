@@ -94,7 +94,7 @@ class Order(BaseModel):
    cart=models.ForeignKey(Cart,on_delete=models.CASCADE,related_name="order_items")
    
    def __str__(self):
-      return   self.cart
+      return   self.user.username
      
      
         

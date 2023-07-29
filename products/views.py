@@ -174,11 +174,12 @@ def send_payment_successful(request,email_price,email_items,email):
 def success(request):
     order_id=request.GET.get('order_id')
     cart=Cart.objects.get(razore_pay_order_id=order_id)
-    cart.is_paid=True
-    cart.save()
+   
     #i can create order with this
     ordered=Order.objects.create(cart=cart,user=request.user)
     ordered.save()
+    cart.is_paid=True
+    cart.save()
     s=""
     for cart_prod in cart.cart_items.all():
         s+=cart_prod.products.product_name + ","
@@ -189,8 +190,17 @@ def success(request):
 
 
 def order(request):
+    orders=Order.objects.filter(user=request.user)
+    # for order in orders:
+    #     for prod in order.cart.order_items.all():
+    #         for product in prod.cart.cart_items.all():
+            
+    #             print(product.products.price)
     
-    return render(request,'order.html')
+    context={
+        "orders": orders
+    }   
+    return render(request,'order.html',context)
 
 
     
