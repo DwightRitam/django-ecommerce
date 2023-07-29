@@ -28,6 +28,27 @@ def get_categories(request,category_type):
         "categories":categories
     }
     return render(request, 'category.html',context)
+
+def search_page(request):
+    
+    search=request.GET.get('search')
+        
+    products=Product.objects.filter(product_name__icontains=search)
+        # print(search)
+        # print(products)
+    products_has=False
+    if products.exists():
+            products_has=True
+    else:
+            products_has=False   
+    context={
+            "products": products,
+            "products_has":products_has,
+            "search": search
+            
+    }   
+    return render(request, 'search.html',context)
+
 def details_page(request,slug):
     product=Product.objects.get(slug=slug)
 
