@@ -18,6 +18,9 @@ class Profile(BaseModel):
     def get_cart_count(self):
       return CartItem.objects.filter(cart__is_paid=False,cart__user=self.user).count()
     
+    def wishlist_count(self):
+      return WishListItem.objects.filter(wishlist__user=self.user).count()
+    
 import random
 def generate_random_number():
   """Generates a 6-digit random number."""
@@ -87,7 +90,36 @@ class CartItem(BaseModel):
   
   def __str__(self):
      return self.products.product_name
-    
+
+# wishlist
+# every user has wishlist that's why
+class Wishlist(BaseModel):
+  user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='user_wishlist')
+
+  def __str__(self):
+     return self.user.username
+  
+# every wishlist  model can have multiple wishlist items 
+
+class WishListItem(BaseModel):
+  wishlist=models.ForeignKey(Wishlist,on_delete=models.CASCADE,related_name="wishlist_items")
+  products=models.ForeignKey(Product,on_delete=models.SET_NULL,null=True,blank=True,related_name="wishlist_products")
+  size_variant=models.ForeignKey(SizeVariant,on_delete=models.SET_NULL,null=True,blank=True)
+  
+  # to get the product size j
+  def get_product_size(self):
+    return self.size_variant.size_name
+  
+  
+  
+  # to get the whole price 
+  def get_product_price(self):
+    return self.products.price + self.size_variant.price
+
+  
+  def __str__(self):
+     return self.products.product_name
+        
 
 class Order(BaseModel):
    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='order_cart')   

@@ -80,7 +80,7 @@
           </div>
           {% if messages %}
           <div id="myElement"
-            class="mb-4 border  border-black text-xl font-serif text-blue-500  border-b-8 rounded-lg bg-info-100 px-6 py-5  text-info-800"
+            class="mb-4 border  border-black text-[17px] font-serif text-blue-500  border-b-8 rounded-lg bg-info-100 px-6 py-5  text-info-800"
             role="alert">
               {% for message in messages %}
               {{message}}
@@ -106,10 +106,10 @@
             <button type = "button" class = " bg-[#ff9f00] border text-white font-serif border-white uppercase rounded-md p-[10px]">
               Add to Cart <i class = "fas fa-shopping-cart"></i>
             </button></a>
-          
+            <a href="{% url 'add_to_wishlist' product.uid %}?size={{selected_size}}"  >
           <button type = "button" class = " bg-[#fb641b] border text-white font-serif border-white uppercase rounded-md p-[10px]">
             Add to wishlist <i class="fas fa-heart"></i>
-          </button>
+          </button></a>
         </div>
         </div>
       </div>

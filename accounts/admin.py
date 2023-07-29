@@ -15,6 +15,17 @@ class CartAdmin(admin.ModelAdmin):
 class CartItemAdmin(admin.ModelAdmin):
         list_display=['cart','products','size_variant']
         model=CartItem
+        
+@admin.register(Wishlist)    
+class WishlistAdmin(admin.ModelAdmin):
+        list_display=['user']
+        model=Wishlist
+
+
+@admin.register(WishListItem)    
+class WishListItemAdmin(admin.ModelAdmin):
+        list_display=['wishlist','products','size_variant']
+        model=WishListItem
 
 @admin.register(Order)    
 class OrderAdmin(admin.ModelAdmin):

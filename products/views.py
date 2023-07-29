@@ -65,6 +65,8 @@ def details_page(request,slug):
     
     return render(request, 'product_details.html',context=context)
 
+
+
 @login_required(login_url="/sign")
 def add_to_cart(request,uid):
     size=request.GET.get('size')
@@ -99,6 +101,84 @@ def remove_Cart(request,cart_item_uid):
         print(e)
         
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required(login_url="/sign")
+def add_to_wishlist(request,uid):
+    size=request.GET.get('size')
+    # print(size)
+    if size:
+        products=Product.objects.get(uid=uid)
+        
+        user=request.user
+        wishlist,_= Wishlist.objects.get_or_create(user=user)
+        # size=request.GET.get('size')
+        
+        size_variant=SizeVariant.objects.get(size_name=size)
+        
+        wishlist_items=WishListItem.objects.create(wishlist=wishlist,products=products,size_variant=size_variant)
+        # cart_items.size_variant=size_variant
+       
+        wishlist_items.save()
+        messages.error(request,f'1 {products} has been added to wishlist')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        messages.error(request,'Please select a Size to proceed')
+        # print('not in cart')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+@login_required(login_url="/sign")
+def wishlist(request):
+    wishlist_items=Wishlist.objects.get(user=request.user)
+    wishlist_has=False
+    if(request.user.profile.wishlist_count()>=1):
+        wishlist_has=True
+    
+    else:
+        
+        wishlist_has=False 
+    
+    # print(wishlist_items)   
+    context={
+        
+        "wishlist_items":wishlist_items,
+        "wishlist_has":wishlist_has
+       
+        
+    }
+    
+    return render(request,'wishlist.html',context)
+
+@login_required(login_url="/sign")
+def wish_to_cart(request,prod_uid,wishlist_uid):
+    size=request.GET.get('size')
+    # print(size)
+    
+    products=Product.objects.get(uid=prod_uid)
+    wish_item=WishListItem.objects.get(uid=wishlist_uid)
+    wish_item.delete()
+    user=request.user
+    cart,_= Cart.objects.get_or_create(user=user,is_paid=False)
+       
+    size_variant=SizeVariant.objects.get(size_name=size)
+        
+    cart_items=CartItem.objects.create(cart=cart,products=products,size_variant=size_variant)
+       
+    cart_items.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+  
+    
+def remove_wishlist(request,wishlist_uid):
+    try:
+        wish_item=WishListItem.objects.get(uid=wishlist_uid)
+        wish_item.delete()
+        
+    except Exception as e:
+        print(e)
+    # print(wishlist_uid)
+        
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 from django.conf import settings
 
