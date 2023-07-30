@@ -43,6 +43,12 @@ python manage.py runserver
 * Add more products
 * Improve the user interface
 * Add more payment methods
+  
+## pics of the project
+
+![Screenshot (188)](https://github.com/DwightRitam/django-ecommerce/assets/101863276/dfd7a63c-3199-4980-8851-7395af4052b2)
+![Screenshot (187)](https://github.com/DwightRitam/django-ecommerce/assets/101863276/754b328b-6cde-4a39-8dcd-541db663c1d5)
+![Screenshot (186)](https://github.com/DwightRitam/django-ecommerce/assets/101863276/d8a33cf3-8d90-4fc5-8426-a80a3b37d9f6)
 
 
 
