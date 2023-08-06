@@ -129,6 +129,17 @@ def add_to_wishlist(request,uid):
     
 @login_required(login_url="/sign")
 def wishlist(request):
+    try:
+        wishlist_items=Wishlist.objects.get(user=request.user)
+    except Exception as e:
+        context={
+
+        "wishlist_has":False,
+ 
+    }
+    
+        return render(request,'wishlist.html',context)    
+    
     wishlist_items=Wishlist.objects.get(user=request.user)
     wishlist_has=False
     if(request.user.profile.wishlist_count()>=1):
